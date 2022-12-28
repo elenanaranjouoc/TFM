@@ -30,7 +30,10 @@ def grupo_genes(expresionSet):
     conj_genes <- function(Set, colu) {
         y = pData(Set)[,colu]
         y <-factor(y)
-        tt = rowttests(Set,y)
+        if (length(unique(y)) == 2) {
+            tt = rowttests(Set,y)
+        }
+        else {tt = rowFtests(Set,y)}
         p0 = tt$p.value
         p1 = mt.rawp2adjp(p0, "BH")
         orden.original = order(p1$index)
@@ -70,7 +73,8 @@ def grupo_genes(expresionSet):
     conj_genes(expresionSet, "ER")
     conj_genes(expresionSet, "HER2")
     conj_genes(expresionSet, "node status")
-    
+    conj_genes(expresionSet, "tumor type")
+    conj_genes(expresionSet, "B-R grade")
     """)
 
 
@@ -132,7 +136,7 @@ def gsa(expresionSet):
         setwd(old_wd)
 
     }
-    grupos <- obtener_grupos_tamaño(expresionSet, 30)
+    grupos <- obtener_grupos_tamaño(expresionSet, 50)
     gsa_f(expresionSet, grupos, "ER")
     gsa_f(expresionSet, grupos, "HER2")
     gsa_f(expresionSet, grupos, "node status")
