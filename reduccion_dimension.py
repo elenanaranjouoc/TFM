@@ -27,7 +27,7 @@ def pca_f(df, n_compon):
     pca = PCA(n_components = n_compon)
     X_trans = pca.fit_transform(df_scaled)
     df_PCA = pd.DataFrame(data = X_trans, columns = ["PC"+str(i+1) for i in range(n_compon)])
-
+    df_PCA = df_PCA.set_index(df.index)
     #Guardamos los datos de la varianza explicada
     cumVar = pd.DataFrame(np.cumsum(pca.explained_variance_ratio_)*100, 
                       columns=["cumVarPerc"])
@@ -35,25 +35,6 @@ def pca_f(df, n_compon):
     df_var = pd.concat([expVar, cumVar], axis=1).rename(index={i:f"PC{i+1}" for i in range(pca.n_components_)})
     df_var.to_csv('./results/pca/Varianza explicada de las componentes tras pca con '+str(n_compon)+'.csv')
     return pca, df_PCA
-
-
-def tsne(df, n_compon):
-    """
-    Applies the tsne algorithm to a dataframe that will be previously standardized.
-
-    Parameters:
-    df: the dataframe on which the tsne is to be applied
-    n_compon: number of tsne components
-
-    Returns:
-    mytsne: trained pca model
-    df_tsne: dataframe transformed using the tsne
-    """
-    mytsne = TSNE(n_components=n_compon)
-    X_r_TSNE = mytsne.fit_transform(df)
-    
-    df_tsne = pd.DataFrame(data = X_r_TSNE, columns = ["PC"+str(i+1) for i in range(n_compon)])
-    return mytsne, df_tsne
 
 
 def plots(df, metadata, method, colu):
