@@ -1,6 +1,7 @@
 from get_and_save_data import get_data, extract_data
 from expresion import create_expressionset_filter
-from reduccion_dimension import pca_f, tsne, plots
+from reduccion_dimension import pca_f, plots
+from clasificador import clasificador
 from grupos_genes import grupo_genes, gsa
 
 # Extraemos datos
@@ -26,19 +27,13 @@ plots(df_pca_trans_2, metadata, 'PCA', 'node status')
 plots(df_pca_trans_2, metadata, 'PCA', 'tumor type')
 plots(df_pca_trans_2, metadata, 'PCA', 'LVI')
 
-# TSNE
-tsne, df_tsne = tsne(df_expres_filt, 2)
-
-#Ploteando
-plots(df_tsne, metadata, 'TSNE', 'ER')
-plots(df_tsne, metadata, 'TSNE', 'HER2')
-plots(df_tsne, metadata, 'TSNE', 'B-R grade')
-plots(df_tsne, metadata, 'TSNE', 'node status')
-plots(df_tsne, metadata, 'TSNE', 'tumor type')
-plots(df_tsne, metadata, 'TSNE', 'LVI')
+# Clasificador
+clasificador(metadata, df_pca_trans)
 
 # Grupo de genes
 grupo_genes(expresionSet)
 
 # Grupo de genes: GSA
 gsa(expresionSet)
+
+
